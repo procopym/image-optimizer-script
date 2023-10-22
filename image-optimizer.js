@@ -5,6 +5,7 @@ const sharp = require("sharp");
 const directory = "./optimized";
 const maxWidth = 1920;
 const maxHeight = 1080;
+const quality = 85;
 const ratio = [1]; // 0.25, 0.5, 0.75, 1, 2
 
 // Processing
@@ -15,7 +16,6 @@ if (process.argv.length < 3) {
 
 const inputImagePath = process.argv[2];
 console.log(`Image: ${inputImagePath}`);
-const outputImagePath = `new-${inputImagePath}`;
 
 if (!fs.existsSync(inputImagePath)) {
   console.error(`Input file "${inputImagePath}" does not exist.`);
@@ -56,7 +56,7 @@ function optimize(newWidth, newHeight) {
     const fileName = `${directory}/${imageName}.jpg`;
 
     sharp(buffer)
-      .jpeg({ mozjpeg: true, quality: 75 })
+      .jpeg({ mozjpeg: true, quality })
       .resize(Math.ceil(newWidth * scale), Math.ceil(newHeight * scale), {
         fit: "inside",
       })
@@ -75,7 +75,7 @@ function optimize(newWidth, newHeight) {
     const fileName = `${finalDir}/${imageName}-${ratio[i]}.jpg`;
 
     sharp(buffer)
-      .jpeg({ mozjpeg: true, quality: 75 })
+      .jpeg({ mozjpeg: true })
       .resize(Math.ceil(newWidth * ratio[i]), Math.ceil(newHeight * ratio[i]), {
         fit: "inside",
       })
