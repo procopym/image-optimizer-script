@@ -1,5 +1,5 @@
-const fs = require("fs");
-const sharp = require("sharp");
+import { existsSync, readFileSync, mkdirSync } from "fs";
+import sharp from "sharp";
 
 // Configurations
 const directory = "./optimized";
@@ -17,16 +17,16 @@ if (process.argv.length < 3) {
 const inputImagePath = process.argv[2];
 console.log(`Image: ${inputImagePath}`);
 
-if (!fs.existsSync(inputImagePath)) {
+if (!existsSync(inputImagePath)) {
   console.error(`Input file "${inputImagePath}" does not exist.`);
   process.exit(1);
 }
 
 // Create a readable stream from the input image file
-const buffer = fs.readFileSync(inputImagePath);
+const buffer = readFileSync(inputImagePath);
 
-if (!fs.existsSync(directory)) {
-  fs.mkdirSync(directory);
+if (!existsSync(directory)) {
+  mkdirSync(directory);
 }
 
 function cb(outputImagePath) {
@@ -68,8 +68,8 @@ function optimize(newWidth, newHeight) {
   console.log("Images path: " + finalDir);
 
   for (let i = 0; i < ratio.length; i++) {
-    if (!fs.existsSync(finalDir)) {
-      fs.mkdirSync(finalDir);
+    if (!existsSync(finalDir)) {
+      mkdirSync(finalDir);
     }
 
     const fileName = `${finalDir}/${imageName}-${ratio[i]}.jpg`;
