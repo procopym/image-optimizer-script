@@ -47,6 +47,14 @@ function optimize(newWidth, newHeight) {
     inputImagePath.lastIndexOf(".")
   );
 
+  const s = (scale) => {
+    return sharp(buffer)
+      .jpeg({ mozjpeg: true, quality })
+      .resize(Math.ceil(newWidth * scale), Math.ceil(newHeight * scale), {
+        fit: "inside",
+      });
+  };
+
   if (isOneSize) {
     let scale = 1;
     if (ratio.length === 1) {
@@ -55,12 +63,7 @@ function optimize(newWidth, newHeight) {
 
     const fileName = `${directory}/${imageName}.jpg`;
 
-    sharp(buffer)
-      .jpeg({ mozjpeg: true, quality })
-      .resize(Math.ceil(newWidth * scale), Math.ceil(newHeight * scale), {
-        fit: "inside",
-      })
-      .toFile(fileName, cb(fileName));
+    s(scale).toFile(fileName, cb(fileName));
     return;
   }
 
@@ -74,12 +77,9 @@ function optimize(newWidth, newHeight) {
 
     const fileName = `${finalDir}/${imageName}-${ratio[i]}.jpg`;
 
-    sharp(buffer)
-      .jpeg({ mozjpeg: true })
-      .resize(Math.ceil(newWidth * ratio[i]), Math.ceil(newHeight * ratio[i]), {
-        fit: "inside",
-      })
-      .toFile(fileName, cb(fileName));
+    const scale = ratio[i];
+
+    s(scale).toFile(fileName, cb(fileName));
   }
 }
 
